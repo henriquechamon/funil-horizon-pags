@@ -448,28 +448,10 @@ body::before {
         <div class="dot active"></div>
         <div class="dot"></div>
         <div class="dot"></div>
-        <div class="dot"></div>
       </div>
 
       <div class="form-step visible" data-step="1">
         <h2>Vamos calcular seu ganho</h2>
-        <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">Preencha os dados abaixo para ver quanto a mais você lucraria rodando na Horizon.</p>
-        <div class="field">
-          <label for="nome">Seu nome</label>
-          <input type="text" id="nome" placeholder="Como podemos te chamar?" required>
-        </div>
-        <div class="field">
-          <label for="telefone">WhatsApp</label>
-          <input type="tel" id="telefone" placeholder="(31) 99999-9999" required>
-        </div>
-        <button class="btn-next" onclick="nextStep(1)">
-          Continuar
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-        </button>
-      </div>
-
-      <div class="form-step" data-step="2">
-        <h2>Sobre sua operação</h2>
         <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">Precisamos de alguns números para fazer a conta.</p>
         <div class="field">
           <label for="faturamento">Faturamento mensal</label>
@@ -493,14 +475,13 @@ body::before {
             <option value="outro">Outro</option>
           </select>
         </div>
-        <button class="btn-next" onclick="nextStep(2)">
+        <button class="btn-next" onclick="nextStep(1)">
           Continuar
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
         </button>
-        <button class="btn-back" onclick="prevStep(2)">Voltar</button>
       </div>
 
-      <div class="form-step" data-step="3">
+      <div class="form-step" data-step="2">
         <h2>Ticket e dificuldade</h2>
         <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">Quase lá. Mais duas perguntas.</p>
         <div class="field">
@@ -522,7 +503,7 @@ body::before {
           Ver meu resultado
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L5.5 8.5 2 5"/></svg>
         </button>
-        <button class="btn-back" onclick="prevStep(3)">Voltar</button>
+        <button class="btn-back" onclick="prevStep(2)">Voltar</button>
       </div>
     </div>
   </div>
@@ -534,7 +515,7 @@ body::before {
     <div class="typing-indicator">
       <span></span><span></span><span></span>
     </div>
-    <p>Calculando o potencial da sua operação,<br><span class="loading-name" id="loadingName"></span>...</p>
+    <p>Calculando o potencial da sua operação...</p>
   </div>
 </section>
 
@@ -627,14 +608,10 @@ body::before {
 
   function validate(step) {
     if (step === 1) {
-      if (!document.getElementById('nome').value.trim()) { document.getElementById('nome').focus(); return false; }
-      if (!document.getElementById('telefone').value.trim()) { document.getElementById('telefone').focus(); return false; }
-    }
-    if (step === 2) {
       if (!document.getElementById('faturamento').value) { document.getElementById('faturamento').focus(); return false; }
       if (!document.getElementById('area').value) { document.getElementById('area').focus(); return false; }
     }
-    if (step === 3) {
+    if (step === 2) {
       if (!document.getElementById('ticket').value) { document.getElementById('ticket').focus(); return false; }
     }
     return true;
@@ -673,16 +650,14 @@ body::before {
   }
 
   window.submitForm = function () {
-    if (!validate(3)) return;
+    if (!validate(2)) return;
 
-    var nome = document.getElementById('nome').value.trim();
     var faturamento = parseInt(document.getElementById('faturamento').value, 10);
 
     document.getElementById('formCard').style.display = 'none';
 
     var loading = document.getElementById('loadingScreen');
     loading.classList.add('visible');
-    document.getElementById('loadingName').textContent = nome.split(' ')[0];
 
     loading.scrollIntoView({ behavior: 'smooth' });
 
@@ -690,8 +665,6 @@ body::before {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        nome: nome,
-        telefone: document.getElementById('telefone').value.trim(),
         faturamento: document.getElementById('faturamento').value,
         nicho: document.getElementById('area').value,
         ticketmedio: document.getElementById('ticket').value,
@@ -731,18 +704,7 @@ body::before {
     }, 2200);
   };
 
-  var telInput = document.getElementById('telefone');
-  telInput.addEventListener('input', function () {
-    var v = this.value.replace(/\D/g, '');
-    if (v.length > 11) v = v.slice(0, 11);
-    if (v.length > 6) {
-      this.value = '(' + v.slice(0, 2) + ') ' + v.slice(2, 7) + '-' + v.slice(7);
-    } else if (v.length > 2) {
-      this.value = '(' + v.slice(0, 2) + ') ' + v.slice(2);
-    } else if (v.length > 0) {
-      this.value = '(' + v;
-    }
-  });
+
 })();
 </script>
 </body>
