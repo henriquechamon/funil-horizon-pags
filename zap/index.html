@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Funil Horizon</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1791049589697848');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1791049589697848&ev=PageView&noscript=1"></noscript>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root {
+  --bg: #fcfbf9;
+  --surface: #ffffff;
+  --card: #ffffff;
+  --elev: #f4f3f0;
+  --border: #1717171a;
+  --border-2: #17171729;
+  --ink: #171717;
+  --muted: #525252;
+  --faint: #6b6b6b;
+  --accent: #d40464;
+  --accent-hover: #b80556;
+  --accent-2: #ad0e5c;
+  --accent-soft: #d404640f;
+  --on-accent: #ffffff;
+  --success: #166534;
+  --success-soft: #16653412;
+  --lp-500: #d40464;
+  --lp-600: #b80556;
+  --lp-400: #e8448a;
+  --lp-100: #fde3ef;
+  --lp-50: #fff4f9;
+  --lp-texto: #ad0e5c;
+  --lp-quente: #ff3ea5;
+  --lp-offwhite: #fcfbf9;
+  --lp-cardclaro: #f4f3f0;
+  --lp-borda: #1717171a;
+  --lp-muted: #525252;
+  --online: #22c55e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #111111; --surface: #191919; --card: #191919; --elev: #202020;
+    --border: #ffffff14; --border-2: #ffffff26;
+    --ink: #f5f5f7; --muted: #ffffff9e; --faint: #ffffff66;
+    --accent: #d6186f; --accent-hover: #b80556; --accent-2: #ff7ab8; --accent-soft: #d6186f1f;
+    --success: #4ade80; --success-soft: #4ade8020;
+    --lp-500: #d6186f; --lp-600: #b80556; --lp-400: #e8448a;
+    --lp-100: #3a1028; --lp-50: #1f0a14; --lp-texto: #ff7ab8; --lp-quente: #ff3ea5;
+    --lp-offwhite: #111111; --lp-cardclaro: #202020; --lp-borda: #ffffff14; --lp-muted: #ffffff9e;
+    --online: #4ade80;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #111111; --surface: #191919; --card: #191919; --elev: #202020;
+  --border: #ffffff14; --border-2: #ffffff26;
+  --ink: #f5f5f7; --muted: #ffffff9e; --faint: #ffffff66;
+  --accent: #d6186f; --accent-hover: #b80556; --accent-2: #ff7ab8; --accent-soft: #d6186f1f;
+  --success: #4ade80; --success-soft: #4ade8020;
+  --lp-500: #d6186f; --lp-600: #b80556; --lp-400: #e8448a;
+  --lp-100: #3a1028; --lp-50: #1f0a14; --lp-texto: #ff7ab8; --lp-quente: #ff3ea5;
+  --lp-offwhite: #111111; --lp-cardclaro: #202020; --lp-borda: #ffffff14; --lp-muted: #ffffff9e;
+  --online: #4ade80;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { overflow-x: hidden; }
+
+body {
+  font-family: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--bg);
+}
+
+.dentro { max-width: 720px; margin-inline: auto; padding-inline: 20px; width: 100%; }
+
+/* ---- HERO ---- */
+.hero { padding: 48px 0 40px; text-align: center; }
+@media (min-width: 640px) { .hero { padding: 120px 0 80px; } }
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--lp-texto); margin-bottom: 20px;
+}
+@media (min-width: 640px) {
+  .hero-eyebrow { font-size: 12px; letter-spacing: 0.28em; margin-bottom: 28px; }
+}
+.hero-eyebrow::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent);
+  animation: pulse-dot 2s ease infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(1.6); }
+}
+
+.hero h1 {
+  font-size: 26px; font-weight: 400;
+  line-height: 1.15; letter-spacing: -0.02em;
+  margin-inline: auto; text-wrap: balance;
+  word-wrap: break-word; overflow-wrap: break-word;
+}
+@media (min-width: 640px) {
+  .hero h1 { font-size: clamp(36px, 5vw, 56px); line-height: 1.08; letter-spacing: -0.03em; max-width: 680px; }
+}
+.hero h1 .rosa { color: var(--accent-2); font-weight: 500; }
+
+.hero-sub {
+  margin-top: 16px; font-size: 15px; line-height: 1.55;
+  color: var(--muted); max-width: 520px; margin-inline: auto;
+}
+@media (min-width: 640px) { .hero-sub { margin-top: 24px; font-size: 19px; line-height: 1.6; } }
+.hero-sub strong { color: var(--ink); font-weight: 600; }
+
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 28px; padding: 14px 20px; border-radius: 9999px;
+  background: var(--accent); color: var(--on-accent);
+  font-size: 13px; font-weight: 600; border: none; cursor: pointer;
+  transition: background .2s, transform .2s;
+  text-decoration: none; line-height: 1.3; text-align: center;
+  max-width: 100%; word-wrap: break-word;
+}
+@media (min-width: 640px) {
+  .hero-cta { margin-top: 40px; padding: 16px 32px; font-size: 16px; }
+}
+.hero-cta:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.hero-cta .arrow-down {
+  flex-shrink: 0;
+  animation: bounce-arrow 1.8s ease infinite;
+}
+@keyframes bounce-arrow {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(4px); }
+  60% { transform: translateY(-1px); }
+}
+
+/* ---- BADGES ---- */
+.badges {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 8px; margin-top: 24px;
+}
+.badge-item {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 9999px;
+  border: 1px solid var(--border); background: var(--surface);
+  font-size: 12px; font-weight: 500; color: var(--muted);
+}
+@media (min-width: 640px) {
+  .badges { gap: 10px; margin-top: 32px; }
+  .badge-item { padding: 6px 14px; font-size: 13px; gap: 6px; }
+}
+.badge-item svg { color: var(--accent); flex-shrink: 0; }
+
+/* ---- FORM ---- */
+.form-section { padding: 0 0 48px; }
+@media (min-width: 640px) { .form-section { padding: 0 0 80px; } }
+
+.form-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 28px 20px;
+  max-width: 540px; margin-inline: auto;
+}
+@media (min-width: 640px) { .form-card { padding: 48px 40px; } }
+
+.form-card h2 {
+  font-size: 22px; font-weight: 500;
+  letter-spacing: -0.02em; margin-bottom: 4px;
+}
+
+.form-progress { display: flex; gap: 6px; margin-bottom: 32px; }
+.form-progress .dot {
+  height: 3px; flex: 1; border-radius: 9999px;
+  background: var(--elev); transition: background .4s ease, transform .3s ease;
+}
+.form-progress .dot.active { background: var(--accent); }
+
+.form-step { display: none; }
+.form-step.visible { display: block; animation: slideIn .35s ease both; }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.field { margin-bottom: 20px; }
+.field label {
+  display: block; font-size: 14px; font-weight: 500;
+  color: var(--ink); margin-bottom: 6px;
+}
+.field input, .field select, .field textarea {
+  width: 100%; padding: 12px 14px; border-radius: 10px;
+  border: 1px solid var(--border-2); background: var(--bg);
+  color: var(--ink); font-family: inherit; font-size: 15px;
+  outline: none; transition: border-color .2s, box-shadow .2s;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.field textarea { resize: vertical; min-height: 80px; }
+.field select { cursor: pointer; }
+.field input::placeholder, .field textarea::placeholder { color: var(--faint); }
+
+.btn-next, .btn-submit {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 14px; border-radius: 9999px;
+  background: var(--accent); color: var(--on-accent);
+  font-family: inherit; font-size: 16px; font-weight: 600;
+  border: none; cursor: pointer;
+  transition: background .2s, transform .2s; margin-top: 8px;
+}
+.btn-next:hover, .btn-submit:hover { background: var(--accent-hover); transform: translateY(-1px); }
+
+.btn-back {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; padding: 12px; border-radius: 9999px;
+  background: transparent; color: var(--muted);
+  font-family: inherit; font-size: 14px; font-weight: 500;
+  border: 1px solid var(--border); cursor: pointer;
+  margin-top: 10px; transition: border-color .2s;
+}
+.btn-back:hover { border-color: var(--border-2); }
+
+/* ---- LOADING ---- */
+.loading-screen { display: none; text-align: center; padding: 60px 0; }
+.loading-screen.visible { display: block; animation: fadeUp .4s ease both; }
+
+.typing-indicator {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin: 0 auto 28px; width: 64px; height: 36px;
+  background: var(--elev); border-radius: 18px;
+}
+.typing-indicator span {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent); opacity: .4;
+  animation: typing-bounce 1.4s ease infinite;
+}
+.typing-indicator span:nth-child(2) { animation-delay: .2s; }
+.typing-indicator span:nth-child(3) { animation-delay: .4s; }
+@keyframes typing-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: .4; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+
+.loading-screen p { font-size: 16px; color: var(--muted); line-height: 1.5; }
+.loading-screen .loading-name { font-weight: 600; color: var(--ink); }
+
+/* ---- RESULT ---- */
+.result-screen { display: none; text-align: center; padding: 24px 0 48px; }
+@media (min-width: 640px) { .result-screen.visible { padding: 40px 0 80px; } }
+.result-screen.visible { display: block; }
+
+.result-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 28px 20px;
+  max-width: 540px; margin-inline: auto;
+  animation: scaleIn .4s ease both;
+}
+@media (min-width: 640px) { .result-card { padding: 48px 40px; } }
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.result-card .result-eyebrow {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--lp-texto); margin-bottom: 16px;
+}
+
+.result-card .big-number {
+  font-size: 32px; font-weight: 300;
+  letter-spacing: -0.03em; color: var(--accent-2); line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+@media (min-width: 640px) { .result-card .big-number { font-size: clamp(36px, 8vw, 56px); } }
+.result-card .big-number-label {
+  font-size: 15px; color: var(--muted); margin-top: 8px; line-height: 1.5;
+}
+
+.result-divider { width: 40px; height: 1px; background: var(--border-2); margin: 28px auto; }
+
+.result-team { font-size: 15px; color: var(--muted); line-height: 1.6; margin-bottom: 8px; }
+.result-team strong { color: var(--ink); }
+
+.result-waiting {
+  font-size: 20px; font-weight: 500;
+  letter-spacing: -0.02em; color: var(--ink); margin: 24px 0 6px;
+}
+@media (min-width: 640px) { .result-waiting { font-size: 28px; margin: 32px 0 8px; } }
+.result-waiting-sub { font-size: 15px; color: var(--muted); margin-bottom: 32px; }
+
+/* ---- CONTACTS ---- */
+.contacts { display: flex; flex-direction: column; gap: 12px; }
+.contact-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; border-radius: 12px;
+  border: 1px solid var(--border); background: var(--surface);
+  text-decoration: none; color: var(--ink);
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+  opacity: 0; animation: fadeUp .4s ease forwards;
+}
+.contact-btn:nth-child(1) { animation-delay: .1s; }
+.contact-btn:nth-child(2) { animation-delay: .25s; }
+.contact-btn:hover {
+  border-color: var(--border-2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px -6px #17171718;
+}
+
+.contact-avatar {
+  position: relative; flex-shrink: 0;
+}
+.contact-avatar img {
+  width: 48px; height: 48px; border-radius: 50%;
+  object-fit: cover; display: block;
+}
+.contact-avatar .online-dot {
+  position: absolute; bottom: 1px; right: 1px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--online);
+  border: 2px solid var(--surface);
+  animation: pulse-online 2.5s ease infinite;
+}
+@keyframes pulse-online {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,.5); }
+  50% { box-shadow: 0 0 0 4px rgba(34,197,94,0); }
+}
+
+.contact-info { text-align: left; flex: 1; min-width: 0; }
+.contact-name { font-size: 15px; font-weight: 600; display: block; }
+.contact-phone { font-size: 13px; color: var(--muted); margin-top: 2px; display: block; }
+
+.contact-whatsapp {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--success); display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0;
+  transition: transform .2s;
+}
+.contact-btn:hover .contact-whatsapp { transform: scale(1.1); }
+.contact-whatsapp svg { color: #fff; }
+
+/* ---- FOOTER ---- */
+.footer { padding: 32px 0; text-align: center; border-top: 1px solid var(--border); }
+.footer p { font-size: 13px; color: var(--faint); }
+.footer .horizon-mark { font-weight: 600; color: var(--accent-2); }
+
+/* ---- ANIMATIONS ---- */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp .5s ease both; }
+.fade-up-d1 { animation-delay: .1s; }
+.fade-up-d2 { animation-delay: .2s; }
+.fade-up-d3 { animation-delay: .3s; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="dentro">
+    <p class="hero-eyebrow fade-up">HORIZON GATEWAY</p>
+
+    <h1 class="fade-up fade-up-d1">
+      Já pensou processar suas vendas e ganhar
+      <span class="rosa">até 12% de cashback</span> nas suas taxas?
+    </h1>
+
+    <p class="hero-sub fade-up fade-up-d2">
+      Ter <strong>Pix exclusivo pra sua operação de Direct Response?</strong>
+      Só na Horizon você encontra isso.
+    </p>
+
+    <button class="hero-cta fade-up fade-up-d3" onclick="scrollToForm()">
+      <span>Veja o quanto você ganharia de lucro a mais</span>
+      <svg class="arrow-down" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 4-4M9 16V4"/></svg>
+    </button>
+
+    <div class="badges fade-up fade-up-d3">
+      <span class="badge-item">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L5.5 8.5 2 5"/></svg>
+        Cashback real nas taxas
+      </span>
+      <span class="badge-item">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L5.5 8.5 2 5"/></svg>
+        Pix exclusivo DR
+      </span>
+      <span class="badge-item">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L5.5 8.5 2 5"/></svg>
+        Time dedicado
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FORM ===================== -->
+<section class="form-section" id="formulario">
+  <div class="dentro">
+    <div class="form-card" id="formCard">
+      <div class="form-progress" id="progress">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <div class="form-step visible" data-step="1">
+        <h2>Vamos calcular seu ganho</h2>
+        <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">Precisamos de alguns números para fazer a conta.</p>
+        <div class="field">
+          <label for="faturamento">Faturamento mensal</label>
+          <select id="faturamento" required>
+            <option value="" disabled selected>Selecione a faixa</option>
+            <option value="50000">Até R$ 50 mil</option>
+            <option value="150000">R$ 50 mil a R$ 200 mil</option>
+            <option value="400000">R$ 200 mil a R$ 500 mil</option>
+            <option value="750000">R$ 500 mil a R$ 1 milhão</option>
+            <option value="1500000">Acima de R$ 1 milhão</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="area">Área de atuação</label>
+          <select id="area" required>
+            <option value="" disabled selected>Selecione</option>
+            <option value="info">Infoprodutos</option>
+            <option value="ecommerce">E-commerce</option>
+            <option value="saas">SaaS / Assinaturas</option>
+            <option value="servicos">Serviços</option>
+            <option value="outro">Outro</option>
+          </select>
+        </div>
+        <button class="btn-next" onclick="nextStep(1)">
+          Continuar
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+
+      <div class="form-step" data-step="2">
+        <h2>Ticket e dificuldade</h2>
+        <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">Quase lá. Mais duas perguntas.</p>
+        <div class="field">
+          <label for="ticket">Qual o ticket médio da sua operação?</label>
+          <select id="ticket" required>
+            <option value="" disabled selected>Selecione a faixa</option>
+            <option value="47">Até R$ 97</option>
+            <option value="197">R$ 97 a R$ 297</option>
+            <option value="497">R$ 297 a R$ 697</option>
+            <option value="997">R$ 697 a R$ 1.997</option>
+            <option value="2997">Acima de R$ 1.997</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="dor">Qual sua maior dor hoje que te impede de faturar mais no mercado digital?</label>
+          <textarea id="dor" placeholder="Conta pra gente o que mais trava a sua operação..." rows="3"></textarea>
+        </div>
+        <button class="btn-submit" onclick="submitForm()">
+          Ver meu resultado
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L5.5 8.5 2 5"/></svg>
+        </button>
+        <button class="btn-back" onclick="prevStep(2)">Voltar</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LOADING ===================== -->
+<section class="loading-screen" id="loadingScreen">
+  <div class="dentro">
+    <div class="typing-indicator">
+      <span></span><span></span><span></span>
+    </div>
+    <p>Calculando o potencial da sua operação...</p>
+  </div>
+</section>
+
+<!-- ===================== RESULT ===================== -->
+<section class="result-screen" id="resultScreen">
+  <div class="dentro">
+    <div class="result-card">
+      <p class="result-eyebrow">SEU RESULTADO</p>
+
+      <p class="big-number" id="resultValue">R$ 0</p>
+      <p class="big-number-label">de cashback por mês, apenas rodando na Horizon.</p>
+
+      <div class="result-divider"></div>
+
+      <p class="result-team">
+        A Horizon tem um <strong>time dedicado</strong> para te ajudar na sua operação, só por ser seller.
+        Suporte real, roteamento inteligente e cashback que volta pro seu bolso.
+      </p>
+
+      <p class="result-waiting">Tá esperando o que?</p>
+      <p class="result-waiting-sub">Fale agora com nosso time e migre sua operação.</p>
+
+      <div class="contacts">
+        <a class="contact-btn" id="contactHenrique" href="#" target="_blank" rel="noopener">
+          <span class="contact-avatar">
+            <img src="https://info.horizonpags.com/api/uploads/cmw06as4f08dilj012083j9of" alt="Henrique">
+            <span class="online-dot"></span>
+          </span>
+          <span class="contact-info">
+            <span class="contact-name">Henrique</span>
+            <span class="contact-phone">+55 31 7535-4847</span>
+          </span>
+          <span class="contact-whatsapp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.01a9.86 9.86 0 01-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374A9.86 9.86 0 012.167 12.05c0-5.454 4.436-9.89 9.9-9.89 2.643 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.898 9.884zM20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893a11.792 11.792 0 001.587 5.945L0 24l6.335-1.652A11.882 11.882 0 0012.04 23.77c6.578 0 11.936-5.338 11.94-11.9.002-3.174-1.233-6.16-3.46-8.421z"/></svg>
+          </span>
+        </a>
+        <a class="contact-btn" id="contactSilva" href="#" target="_blank" rel="noopener">
+          <span class="contact-avatar">
+            <img src="https://info.horizonpags.com/api/uploads/cmwgu4os705fmqw01ipyp47rn" alt="Silva">
+            <span class="online-dot"></span>
+          </span>
+          <span class="contact-info">
+            <span class="contact-name">Silva, Gerente</span>
+            <span class="contact-phone">+55 31 9663-8459</span>
+          </span>
+          <span class="contact-whatsapp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.01a9.86 9.86 0 01-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374A9.86 9.86 0 012.167 12.05c0-5.454 4.436-9.89 9.9-9.89 2.643 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.898 9.884zM20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893a11.792 11.792 0 001.587 5.945L0 24l6.335-1.652A11.882 11.882 0 0012.04 23.77c6.578 0 11.936-5.338 11.94-11.9.002-3.174-1.233-6.16-3.46-8.421z"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="dentro">
+    <p><span class="horizon-mark">Horizon</span> &middot; Gateway de pagamentos inteligente</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var utms = {
+    utm_source: params.get('utm_source') || '',
+    utm_medium: params.get('utm_medium') || '',
+    utm_campaign: params.get('utm_campaign') || '',
+    utm_content: params.get('utm_content') || '',
+    utm_term: params.get('utm_term') || ''
+  };
+
+  var currentStep = 1;
+
+  function updateProgress() {
+    var dots = document.querySelectorAll('#progress .dot');
+    dots.forEach(function (dot, i) {
+      dot.classList.toggle('active', i < currentStep);
+    });
+  }
+
+  function showStep(n) {
+    document.querySelectorAll('.form-step').forEach(function (el) {
+      el.classList.remove('visible');
+    });
+    var target = document.querySelector('[data-step="' + n + '"]');
+    if (target) target.classList.add('visible');
+    updateProgress();
+  }
+
+  function validate(step) {
+    if (step === 1) {
+      if (!document.getElementById('faturamento').value) { document.getElementById('faturamento').focus(); return false; }
+      if (!document.getElementById('area').value) { document.getElementById('area').focus(); return false; }
+    }
+    if (step === 2) {
+      if (!document.getElementById('ticket').value) { document.getElementById('ticket').focus(); return false; }
+    }
+    return true;
+  }
+
+  window.nextStep = function (from) {
+    if (!validate(from)) return;
+    currentStep = from + 1;
+    showStep(currentStep);
+  };
+
+  window.prevStep = function (from) {
+    currentStep = from - 1;
+    showStep(currentStep);
+  };
+
+  window.scrollToForm = function () {
+    document.getElementById('formulario').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  function animateValue(el, target, duration) {
+    var start = 0;
+    var startTime = null;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = Math.round(eased * target);
+      el.textContent = current.toLocaleString('pt-BR', {
+        style: 'currency', currency: 'BRL',
+        minimumFractionDigits: 0, maximumFractionDigits: 0
+      });
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  window.submitForm = function () {
+    if (!validate(2)) return;
+
+    var faturamento = parseInt(document.getElementById('faturamento').value, 10);
+
+    document.getElementById('formCard').style.display = 'none';
+
+    var loading = document.getElementById('loadingScreen');
+    loading.classList.add('visible');
+
+    loading.scrollIntoView({ behavior: 'smooth' });
+
+    fetch('https://app.horizonpags.com/api/lead/3R0BEAo3nNBW9CDT', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        faturamento: document.getElementById('faturamento').value,
+        nicho: document.getElementById('area').value,
+        ticketmedio: document.getElementById('ticket').value,
+        dor: document.getElementById('dor').value.trim(),
+        funil: 'zap',
+        utm_source: utms.utm_source,
+        utm_medium: utms.utm_medium,
+        utm_campaign: utms.utm_campaign,
+        utm_content: utms.utm_content,
+        utm_term: utms.utm_term
+      })
+    }).catch(function () {});
+
+    if (typeof fbq === 'function') {
+      fbq('track', 'Lead', {
+        content_name: 'Funil Horizon Qualificação',
+        content_category: document.getElementById('area').value,
+        value: faturamento,
+        currency: 'BRL'
+      });
+    }
+
+    setTimeout(function () {
+      loading.classList.remove('visible');
+
+      var taxas = faturamento * 0.06;
+      var cashback = taxas * 0.12;
+
+      var msg = encodeURIComponent('Olá, vim pelo funil de qualificação e quero migrar minha operação pra Horizon');
+      document.getElementById('contactHenrique').href = 'https://wa.me/553175354847?text=' + msg;
+      document.getElementById('contactSilva').href = 'https://wa.me/553196638459?text=' + msg;
+
+      var result = document.getElementById('resultScreen');
+      result.classList.add('visible');
+      result.scrollIntoView({ behavior: 'smooth' });
+
+      animateValue(document.getElementById('resultValue'), cashback, 1200);
+    }, 2200);
+  };
+
+
+})();
+</script>
+</body>
+</html>
