@@ -150,28 +150,52 @@ body::before {
 @media (min-width: 640px) { .hero-sub { margin-top: 24px; font-size: 19px; line-height: 1.6; } }
 .hero-sub strong { color: var(--ink); font-weight: 600; }
 
+/* ---- FORM ---- */
+.grupo-form {
+  margin-top: 32px; max-width: 400px; margin-inline: auto;
+  display: flex; flex-direction: column; gap: 12px;
+  text-align: left;
+}
+@media (min-width: 640px) { .grupo-form { margin-top: 44px; } }
+
+.form-field { display: flex; flex-direction: column; gap: 4px; }
+.form-field label {
+  font-size: 12px; font-weight: 600; color: var(--muted);
+  letter-spacing: 0.02em;
+}
+.form-field label .opcional { font-weight: 400; color: var(--faint); }
+.form-field input, .form-field select {
+  padding: 12px 14px; border-radius: 10px;
+  border: 1px solid var(--border-2); background: var(--surface);
+  font-family: inherit; font-size: 15px; color: var(--ink);
+  transition: border-color .2s;
+  -webkit-appearance: none; appearance: none;
+}
+.form-field input:focus, .form-field select:focus {
+  outline: none; border-color: var(--accent);
+}
+.form-field input::placeholder { color: var(--faint); }
+.form-field select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236b6b6b'%3E%3Cpath d='M2 4l4 4 4-4'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+
+.form-note {
+  font-size: 12px; color: var(--faint); text-align: center;
+  line-height: 1.5; margin-top: 2px;
+}
+
 .hero-cta {
-  display: inline-flex; align-items: center; gap: 8px;
-  margin-top: 28px; padding: 14px 20px; border-radius: 9999px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 4px; padding: 14px 20px; border-radius: 9999px;
   background: var(--accent); color: var(--on-accent);
-  font-size: 13px; font-weight: 600; border: none; cursor: pointer;
-  transition: background .2s, transform .2s;
+  font-size: 14px; font-weight: 600; border: none; cursor: pointer;
+  transition: background .2s, transform .2s, opacity .2s;
   text-decoration: none; line-height: 1.3; text-align: center;
-  max-width: 100%; word-wrap: break-word;
+  width: 100%;
 }
 @media (min-width: 640px) {
-  .hero-cta { margin-top: 40px; padding: 16px 32px; font-size: 16px; }
+  .hero-cta { padding: 16px 32px; font-size: 16px; }
 }
-.hero-cta:hover { background: var(--accent-hover); transform: translateY(-1px); }
-.hero-cta .arrow-down {
-  flex-shrink: 0;
-  animation: bounce-arrow 1.8s ease infinite;
-}
-@keyframes bounce-arrow {
-  0%, 100% { transform: translateY(0); }
-  40% { transform: translateY(4px); }
-  60% { transform: translateY(-1px); }
-}
+.hero-cta:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-1px); }
+.hero-cta:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* ---- BADGES ---- */
 .badges {
@@ -254,10 +278,37 @@ body::before {
       roteamento inteligente, Pix exclusivo e cashback nas taxas.
     </p>
 
-    <a class="hero-cta fade-up fade-up-d3" href="https://chat.whatsapp.com/KaHR1aqoAfj4z8RE1UBaYk" target="_blank" rel="noopener">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.01a9.86 9.86 0 01-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374A9.86 9.86 0 012.167 12.05c0-5.454 4.436-9.89 9.9-9.89 2.643 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.898 9.884zM20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893a11.792 11.792 0 001.587 5.945L0 24l6.335-1.652A11.882 11.882 0 0012.04 23.77c6.578 0 11.936-5.338 11.94-11.9.002-3.174-1.233-6.16-3.46-8.421z"/></svg>
-      <span>Entrar no grupo agora</span>
-    </a>
+    <form class="grupo-form fade-up fade-up-d3" id="grupoForm" autocomplete="off">
+      <div class="form-field">
+        <label>Nome <span class="opcional">(opcional)</span></label>
+        <input type="text" id="campoNome" placeholder="Seu nome">
+      </div>
+
+      <div class="form-field">
+        <label>WhatsApp <span style="color:var(--accent)">*</span></label>
+        <input type="tel" id="campoTel" placeholder="(00) 00000-0000" inputmode="numeric" required>
+      </div>
+
+      <div class="form-field">
+        <label>Área de atuação no DR <span class="opcional">(opcional)</span></label>
+        <select id="campoArea">
+          <option value="">Selecione...</option>
+          <option value="info">Infoprodutos</option>
+          <option value="ecom">E-commerce / Dropshipping</option>
+          <option value="saas">SaaS / Plataforma</option>
+          <option value="serv">Serviços / Agência</option>
+          <option value="afil">Afiliado</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+
+      <p class="form-note">Apenas para fins de pesquisa. Seus dados não serão compartilhados.</p>
+
+      <button type="submit" class="hero-cta" id="btnEntrar" disabled>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.01a9.86 9.86 0 01-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374A9.86 9.86 0 012.167 12.05c0-5.454 4.436-9.89 9.9-9.89 2.643 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.898 9.884zM20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893a11.792 11.792 0 001.587 5.945L0 24l6.335-1.652A11.882 11.882 0 0012.04 23.77c6.578 0 11.936-5.338 11.94-11.9.002-3.174-1.233-6.16-3.46-8.421z"/></svg>
+        Entrar no grupo agora
+      </button>
+    </form>
 
     <div class="badges fade-up fade-up-d3">
       <span class="badge-item">
@@ -321,14 +372,33 @@ body::before {
     utm_term: params.get('utm_term') || ''
   };
 
-  document.querySelector('.hero-cta').addEventListener('click', function () {
+  var tel = document.getElementById('campoTel');
+  var btn = document.getElementById('btnEntrar');
+
+  tel.addEventListener('input', function () {
+    var v = tel.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 7) v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+    else if (v.length > 2) v = '(' + v.slice(0,2) + ') ' + v.slice(2);
+    else if (v.length > 0) v = '(' + v;
+    tel.value = v;
+    btn.disabled = tel.value.replace(/\D/g, '').length < 10;
+  });
+
+  document.getElementById('grupoForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var nome = document.getElementById('campoNome').value.trim() || 'Lead Grupo';
+    var telefone = tel.value.replace(/\D/g, '');
+    var area = document.getElementById('campoArea').value;
+
     fetch('https://app.horizonpags.com/api/lead/3R0BEAo3nNBW9CDT', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        nome: 'Lead Funil',
-        telefone: '00000000000',
+        nome: nome,
+        telefone: telefone,
         funil: 'grupo',
+        area: area,
         utm_source: utms.utm_source,
         utm_medium: utms.utm_medium,
         utm_campaign: utms.utm_campaign,
@@ -342,6 +412,8 @@ body::before {
         content_name: 'Funil Horizon Grupo'
       });
     }
+
+    window.open('https://chat.whatsapp.com/KaHR1aqoAfj4z8RE1UBaYk', '_blank');
   });
 })();
 </script>
