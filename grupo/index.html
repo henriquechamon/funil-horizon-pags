@@ -391,14 +391,13 @@ body::before {
     var telefone = tel.value.replace(/\D/g, '');
     var area = document.getElementById('campoArea').value;
 
-    fetch('https://app.horizonpags.com/api/lead/3R0BEAo3nNBW9CDT', {
+    fetch('https://app.horizonpags.com/api/lead/IqhlnRaczplKGrQk', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         nome: nome,
         telefone: telefone,
-        funil: 'grupo',
-        area: area,
+        areaatuacao: area,
         utm_source: utms.utm_source,
         utm_medium: utms.utm_medium,
         utm_campaign: utms.utm_campaign,
