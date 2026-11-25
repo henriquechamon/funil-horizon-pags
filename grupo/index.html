@@ -389,21 +389,25 @@ body::before {
     e.preventDefault();
     var nome = document.getElementById('campoNome').value.trim() || 'Lead Grupo';
     var telefone = tel.value.replace(/\D/g, '');
-    var area = document.getElementById('campoArea').value;
+    var areaSelect = document.getElementById('campoArea');
+    var area = areaSelect.options[areaSelect.selectedIndex].text;
+    if (areaSelect.value === '') area = '';
+
+    var payload = {
+      nome: nome,
+      telefone: telefone,
+      areaatuacao: area
+    };
+    if (utms.utm_source) payload.utm_source = utms.utm_source;
+    if (utms.utm_medium) payload.utm_medium = utms.utm_medium;
+    if (utms.utm_campaign) payload.utm_campaign = utms.utm_campaign;
+    if (utms.utm_content) payload.utm_content = utms.utm_content;
+    if (utms.utm_term) payload.utm_term = utms.utm_term;
 
     fetch('https://app.horizonpags.com/api/lead/IqhlnRaczplKGrQk', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        nome: nome,
-        telefone: telefone,
-        areaatuacao: area,
-        utm_source: utms.utm_source,
-        utm_medium: utms.utm_medium,
-        utm_campaign: utms.utm_campaign,
-        utm_content: utms.utm_content,
-        utm_term: utms.utm_term
-      })
+      body: JSON.stringify(payload)
     }).catch(function () {});
 
     if (typeof fbq === 'function') {
